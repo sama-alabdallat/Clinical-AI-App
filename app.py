@@ -5,13 +5,11 @@ from sklearn.datasets import load_breast_cancer
 import base64
 import os
 
+# --- 1. وظيفة الخلفية المضمونة للسيرفر ---
 def set_bg_from_local():
-    desktop = os.path.join(os.environ['USERPROFILE'], 'OneDrive', 'Desktop')
-    img_name = 'lab.JPG'
-    full_path = os.path.join(desktop, img_name)
-    if not os.path.exists(full_path): full_path = img_name
-    if os.path.exists(full_path):
-        with open(full_path, "rb") as f:
+    img_name = 'lab.JPG' # سيبحث عن الصورة المرفوعة بجانبه في GitHub
+    if os.path.exists(img_name):
+        with open(img_name, "rb") as f:
             img_data = f.read()
         b64_encoded = base64.b64encode(img_data).decode()
         style = f"""
@@ -28,22 +26,12 @@ def set_bg_from_local():
         h1, h2, h3, p, span, label, .stMarkdown {{ 
             color: #ffffff !important; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); font-family: 'Segoe UI', sans-serif;
         }}
-        /* تعديل لون السلايدر للون الأحمر */
-        .stSlider [data-baseweb="slider"] {{
-            background-color: transparent;
-        }}
-        .stSlider [data-baseweb="slider"] div div {{
-            background-color: #ff4b4b !important;
-        }}
-        .stSlider [role="slider"] {{
-            background-color: #ff4b4b !important;
-            border: 2px solid white;
-        }}
+        .stSlider [data-baseweb="slider"] div div {{ background-color: #ff4b4b !important; }}
+        .stSlider [role="slider"] {{ background-color: #ff4b4b !important; border: 2px solid white; }}
         .stButton>button {{ 
-            background: #ffffff; color: #002d5d !important; border-radius: 15px; height: 60px; width: 100%; 
-            font-weight: bold; border: none; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            background: #ffffff; color: #001a33 !important; border-radius: 15px; height: 60px; width: 100%; 
+            font-weight: 900; border: none; font-size: 20px; 
         }}
-        .stButton>button:hover {{ background: #e0e0e0; transform: scale(1.01); }}
         </style>
         """
         st.markdown(style, unsafe_allow_html=True)
@@ -65,7 +53,6 @@ model, features = load_ai()
 
 st.markdown('<div class="main-card">', unsafe_allow_html=True)
 st.markdown("<h1 style='font-size: 3.5em;'>🧬 CLINICAL INTELLIGENCE PRO</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 1.3em;'>Professional Medical Analysis Powered by Machine Learning</p>", unsafe_allow_html=True)
 st.write("---")
 
 col1, col2 = st.columns([1, 1.5])
@@ -91,3 +78,4 @@ if st.button("🚀 EXECUTE CLINICAL DIAGNOSTIC SCAN"):
         st.success(f"✅ NORMAL: Healthy Pattern Identified ({float(prob):.1f}%)")
         st.balloons()
 st.markdown('</div>', unsafe_allow_html=True)
+
